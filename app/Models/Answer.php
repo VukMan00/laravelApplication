@@ -13,8 +13,14 @@ class Answer extends Model
         'id',
         'content',
         'answer',
+        'question_id'
     ];
 
     protected $guarded=[];
+
+    public function questions()
+    {
+        return $this->belongsTo(Question::class);
+    }
 
 }

@@ -17,6 +17,7 @@ class CreateAnswers extends Migration
             $table->id();
             $table->string('content');
             $table->boolean('answer');
+            $table->foreignId('question_id');
             $table->timestamps();
         });
     }

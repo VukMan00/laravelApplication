@@ -11,9 +11,19 @@ class Question extends Model
 
     protected $fillable = [
         'id',
-        'content',
-        'answer_id',
+        'content'
     ];
 
+    public function answers()
+    {
+        return $this->hasMany(Answer::class);
+    }
+
+    public function tests(){
+        return $this->hasMany(Test::class);
+    }
+
     protected $guarded=[];
+
+
 }
