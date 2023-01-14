@@ -19,9 +19,9 @@ class User extends Authenticatable
      */
     protected $table = 'users';
     protected $fillable = [
-        'name',
+        'id',
+        'username',
         'email',
-        'password',
         'test_id'
     ];
 
@@ -44,8 +44,8 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function test()
+    public function tests()
     {
-        return $this->belongsTo(Test::class);
+        return $this->belongsTo(Test::class,'test_id');
     }
 }

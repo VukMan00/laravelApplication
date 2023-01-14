@@ -2,12 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\QuestionCollection;
-use App\Http\Resources\QuestionResource;
-use App\Models\Question;
+use App\Models\TestQuestion;
 use Illuminate\Http\Request;
 
-class QuestionController extends Controller
+class TestQuestionController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,8 +14,7 @@ class QuestionController extends Controller
      */
     public function index()
     {
-        $questions = Question::all();
-        return new QuestionCollection($questions);
+        //
     }
 
     /**
@@ -27,8 +24,8 @@ class QuestionController extends Controller
      */
     public function create()
     {
-        $question = Question::create();
-        return response()->json($question);
+        $testQuestion = TestQuestion::create();
+        return response()->json($testQuestion);
     }
 
     /**
@@ -45,30 +42,30 @@ class QuestionController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Question  $question
+     * @param  \App\Models\TestQuestion  $testQuestion
      * @return \Illuminate\Http\Response
      */
-  
-    public function show(Question $question)
+    public function show(TestQuestion $testQuestion)
     {
-        return new QuestionResource($question);
+        //
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Question  $question
+     * @param  \App\Models\TestQuestion  $testQuestion
      * @return \Illuminate\Http\Response
      */
-    public function edit(Request $request,$question_id)
+    public function edit(Request $request,$testQuestion_id)
     {
-        $question = Question::find($question_id);
-        if(is_null($question)){
+        $testQuestion = TestQuestion::find($testQuestion_id);
+        if(is_null($testQuestion)){
             return response()->json('Not found',401);
         }
         else{
-            $question->content = $request->content;
-            $question->update();
+            $testQuestion->test_id = $request->test_id;
+            $testQuestion->question_id = $request->question_id;
+            $testQuestion->update();
             return response()->json('Successfull');
         }
     }
@@ -77,18 +74,19 @@ class QuestionController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Question  $question
+     * @param  \App\Models\TestQuestion  $testQuestion
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $question_id)
+    public function update(Request $request,$testQuestion_id)
     {
-        $question = Question::find($question_id);
-        if(is_null($question)){
+        $testQuestion = TestQuestion::find($testQuestion_id);
+        if(is_null($testQuestion)){
             return response()->json('Not found',401);
         }
         else{
-            $question->content = $request->content;
-            $question->update();
+            $testQuestion->test_id = $request->test_id;
+            $testQuestion->question_id = $request->question_id;
+            $testQuestion->update();
             return response()->json('Successfull');
         }
     }
@@ -96,14 +94,14 @@ class QuestionController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Question  $question
+     * @param  \App\Models\TestQuestion  $testQuestion
      * @return \Illuminate\Http\Response
      */
-    public function destroy($question_id)
+    public function destroy($testQuestion_id)
     {
         try{
-            $question = Question::find($question_id);
-            $question->delete();
+            $testQuestion = TestQuestion::find($testQuestion_id);
+            $testQuestion->delete();
             return response()->json("Successfull");
         }
         catch(\Illuminate\Database\QueryException $e){

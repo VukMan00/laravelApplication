@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\UserCollection;
+use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -15,7 +17,7 @@ class UserController extends Controller
     public function index()
     {
         $users = User::all();
-        return $users;
+        return new UserCollection($users);
     }
 
     /**
@@ -25,7 +27,8 @@ class UserController extends Controller
      */
     public function create()
     {
-       User::create();
+       $user = User::create();
+       return response()->json($user);
     }
 
     /**
@@ -45,15 +48,9 @@ class UserController extends Controller
      * @param  \App\Models\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function show($user_id)
+    public function show(User $user)
     {
-        $user = User::find($user_id);
-        if(is_null($user)){
-            return response()->json('Not found',401);
-        }
-        else{
-            return response()->json($user);
-        }
+        return new UserResource($user);
     }
 
     /**
@@ -62,9 +59,21 @@ class UserController extends Controller
      * @param  \App\Models\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function edit($user)
+    public function edit(Request $request,$user_id)
     {
-        //
+        $user = User::find($user_id);
+        if(is_null($user)){
+            return response()->json('Not found',401);
+        }
+        else{
+            $user->username = $request->username;
+            $user->email = $request->email;
+            $user->author = $request->author;
+            $user->password = $request->password;
+            $user->test_id = $request->test_id;
+            $user->update();
+            return response()->json('Successfull');
+        }
     }
 
     /**
@@ -74,9 +83,21 @@ class UserController extends Controller
      * @param  \App\Models\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, User $user)
+    public function update(Request $request, $user_id)
     {
-        //
+        $user = User::find($user_id);
+        if(is_null($user)){
+            return response()->json('Not found',401);
+        }
+        else{
+            $user->username = $request->username;
+            $user->email = $request->email;
+            $user->author = $request->author;
+            $user->password = $request->password;
+            $user->test_id = $request->test_id;
+            $user->update();
+            return response()->json('Successfull');
+        }
     }
 
     /**
@@ -85,8 +106,15 @@ class UserController extends Controller
      * @param  \App\Models\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function destroy(User $user)
+    public function destroy($user_id)
     {
-        //
+        try{
+            $user = User::find($user_id);
+            $user->delete();
+            return response()->json("Successfull");
+        }
+        catch(\Illuminate\Database\QueryException $e){
+            return response()->json($e);
+        }
     }
 }

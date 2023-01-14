@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\AnswerCollection;
+use App\Http\Resources\AnswerResource;
 use App\Models\Answer;
 use Illuminate\Http\Request;
 
@@ -15,7 +17,7 @@ class AnswerController extends Controller
     public function index()
     {
         $answers = Answer::all();
-        return $answers;
+        return new AnswerCollection($answers);
     }
 
     /**
@@ -25,7 +27,8 @@ class AnswerController extends Controller
      */
     public function create()
     {
-        //
+        $answer = Answer::create();
+        return response()->json($answer);
     }
 
     /**
@@ -45,15 +48,10 @@ class AnswerController extends Controller
      * @param  \App\Models\Answer  $answer
      * @return \Illuminate\Http\Response
      */
-    public function show($answer_id)
+
+    public function show(Answer $answer)
     {
-        $answer = Answer::find($answer_id);
-        if(is_null($answer)){
-            return response()->json('Not found',401);
-        }
-        else{
-            return response()->json($answer);
-        }
+      return new AnswerResource($answer);
     }
 
     /**
@@ -62,9 +60,18 @@ class AnswerController extends Controller
      * @param  \App\Models\Answer  $answer
      * @return \Illuminate\Http\Response
      */
-    public function edit(Answer $answer)
+    public function edit(Request $request,$answer_id)
     {
-        //
+        $answer = Answer::find($answer_id);
+        if(is_null($answer)){
+            return response()->json('Not found',401);
+        }
+        else{
+            $answer->content = $request->content;
+            $answer->answer = $request->answer;
+            $answer->question_id = $request->question_id;
+            $answer->update();
+        }
     }
 
     /**
@@ -74,9 +81,19 @@ class AnswerController extends Controller
      * @param  \App\Models\Answer  $answer
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Answer $answer)
+    public function update(Request $request, $answer_id)
     {
-        //
+        $answer = Answer::find($answer_id);
+        if(is_null($answer)){
+            return response()->json('Not found',401);
+        }
+        else{
+            $answer->content = $request->content;
+            $answer->answer = $request->answer;
+            $answer->question_id = $request->question_id;
+            $answer->update();
+            return response()->json("Successfull"); 
+        }
     }
 
     /**
@@ -85,8 +102,16 @@ class AnswerController extends Controller
      * @param  \App\Models\Answer  $answer
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Answer $answer)
+    public function destroy($answer_id)
     {
-        //
+        try{
+            $answer = Answer::find($answer_id);
+            $answer->delete();
+            return response()->json("Successfull");
+        }
+        catch(\Illuminate\Database\QueryException $e){
+            return response()->json($e);
+        }
+
     }
 }

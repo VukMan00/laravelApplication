@@ -21,7 +21,7 @@ class Answer extends Model
 
     public function questions()
     {
-        return $this->belongsTo(Question::class);
+        return $this->belongsTo(Question::class,'question_id');
     }
 
 }

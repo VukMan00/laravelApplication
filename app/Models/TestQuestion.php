@@ -11,18 +11,19 @@ class TestQuestion extends Model
 
     protected $table = 'test_question';
     protected $fillable = [
+        'id',
         'test_id',
         'question_id',
     ];
 
     protected $guarded=[];
 
-    public function test()
+    public function tests()
     {
         return $this->belongsTo(Test::class);
     }
 
-    public function question(){
+    public function questions(){
         return $this->belongsTo(Question::class);
     }
 }

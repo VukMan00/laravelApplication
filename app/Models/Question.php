@@ -21,7 +21,7 @@ class Question extends Model
     }
 
     public function tests(){
-        return $this->hasMany(Test::class);
+        return $this->belongsToMany(Test::class,'test_question','question_id','test_id');
     }
 
     protected $guarded=[];

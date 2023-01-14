@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\TestCollection;
+use App\Http\Resources\TestResource;
 use App\Models\Test;
 use Illuminate\Http\Request;
+use PHPUnit\TextUI\TestRunner;
 
 class TestController extends Controller
 {
@@ -15,7 +18,7 @@ class TestController extends Controller
     public function index()
     {
         $tests = Test::all();
-        return $tests;
+        return new TestCollection($tests);
     }
 
     /**
@@ -25,7 +28,8 @@ class TestController extends Controller
      */
     public function create()
     {
-        //
+        $test = Test::create();
+        return response()->json($test);
     }
 
     /**
@@ -45,15 +49,10 @@ class TestController extends Controller
      * @param  \App\Models\Test  $test
      * @return \Illuminate\Http\Response
      */
-    public function show($test_id)
+
+    public function show(Test $test)
     {
-        $test = Test::find($test_id);
-        if(is_null($test)){
-            return response()->json('Not found',401);
-        }
-        else{
-            return response()->json($test);
-        }
+        return new TestResource($test);
     }
 
     /**
@@ -62,9 +61,19 @@ class TestController extends Controller
      * @param  \App\Models\Test  $test
      * @return \Illuminate\Http\Response
      */
-    public function edit(Test $test)
+    public function edit(Request $request,$test_id)
     {
-        //
+        $test = Test::find($test_id);
+        if(is_null($test)){
+            return response()->json('Not found',401);
+        }
+        else{
+            $test->name = $request->name;
+            $test->points = $request->points;
+            $test->author = $request->author;
+            $test->update();
+            return response()->json('Successfull');
+        }
     }
 
     /**
@@ -74,9 +83,19 @@ class TestController extends Controller
      * @param  \App\Models\Test  $test
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Test $test)
+    public function update(Request $request,$test_id)
     {
-        //
+        $test = Test::find($test_id);
+        if(is_null($test)){
+            return response()->json('Not found',401);
+        }
+        else{
+            $test->name = $request->name;
+            $test->points = $request->points;
+            $test->author = $request->author;
+            $test->update();
+            return response()->json('Successfull');
+        }
     }
 
     /**
@@ -85,8 +104,15 @@ class TestController extends Controller
      * @param  \App\Models\Test  $test
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Test $test)
+    public function destroy($test_id)
     {
-        //
+        try{
+            $test = Test::find($test_id);
+            $test->delete();
+            return response()->json("Successfull");
+        }
+        catch(\Illuminate\Database\QueryException $e){
+            return response()->json($e);
+        }
     }
 }
