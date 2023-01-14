@@ -14,7 +14,7 @@ class QuestionFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'content'=>$this->faker->name(),
         ];
     }
 }

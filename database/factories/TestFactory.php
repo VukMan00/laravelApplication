@@ -14,7 +14,8 @@ class TestFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'name'=>$this->faker->name(),
+            'author'=>$this->faker->name()
         ];
     }
 }

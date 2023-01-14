@@ -11,6 +11,7 @@ class CreateTestQuestion extends Migration
      *
      * @return void
      */
+    
     public function up()
     {
         Schema::create('test_question', function (Blueprint $table) {

@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use App\Models\Question;
 
 class AnswerFactory extends Factory
 {
@@ -14,7 +15,9 @@ class AnswerFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'content'=>$this->faker->word(),
+            'answer'=>$this->faker->boolean(),
+            'question_id'=>Question::factory()
         ];
     }
 }

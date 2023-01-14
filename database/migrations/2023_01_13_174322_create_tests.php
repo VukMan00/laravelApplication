@@ -15,7 +15,7 @@ class CreateTests extends Migration
     {
         Schema::create('tests', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->string('name')->unique();
             $table->integer('points');
             $table->string('author');
             $table->timestamps();
