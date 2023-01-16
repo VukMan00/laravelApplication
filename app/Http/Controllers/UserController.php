@@ -6,6 +6,7 @@ use App\Http\Resources\UserCollection;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
@@ -27,8 +28,7 @@ class UserController extends Controller
      */
     public function create()
     {
-       $user = User::create();
-       return response()->json($user);
+       //
     }
 
     /**
@@ -37,7 +37,7 @@ class UserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store($user)
+    public function store(Request $request)
     {
         //
     }
@@ -61,6 +61,15 @@ class UserController extends Controller
      */
     public function edit(Request $request,$user_id)
     {
+        $validator = Validator::make($request->all(),[
+            'username'=>'required|string|max:255|unique:users',
+            'email'=>'required|string|email|max:255|unique:users',
+        ]);
+
+        if($validator->fails()){
+            return response()->json($validator->errors());
+        }
+
         $user = User::find($user_id);
         if(is_null($user)){
             return response()->json('Not found',401);
@@ -68,11 +77,9 @@ class UserController extends Controller
         else{
             $user->username = $request->username;
             $user->email = $request->email;
-            $user->author = $request->author;
-            $user->password = $request->password;
-            $user->test_id = $request->test_id;
             $user->update();
-            return response()->json('Successfull');
+
+            return response()->json($user);
         }
     }
 
@@ -85,6 +92,15 @@ class UserController extends Controller
      */
     public function update(Request $request, $user_id)
     {
+        $validator = Validator::make($request->all(),[
+            'username'=>'required|string|max:255|unique:users',
+            'email'=>'required|string|email|max:255|unique:users',
+        ]);
+
+        if($validator->fails()){
+            return response()->json($validator->errors());
+        }
+
         $user = User::find($user_id);
         if(is_null($user)){
             return response()->json('Not found',401);
@@ -92,11 +108,9 @@ class UserController extends Controller
         else{
             $user->username = $request->username;
             $user->email = $request->email;
-            $user->author = $request->author;
-            $user->password = $request->password;
-            $user->test_id = $request->test_id;
             $user->update();
-            return response()->json('Successfull');
+
+            return response()->json($user);
         }
     }
 

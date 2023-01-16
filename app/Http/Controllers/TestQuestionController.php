@@ -8,6 +8,7 @@ use App\Models\Test;
 use App\Models\TestQuestion;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 class TestQuestionController extends Controller
 {
@@ -28,8 +29,17 @@ class TestQuestionController extends Controller
     }
 
     //dodavanje pitanja testu
-    public function create($test_id,Request $request)
+    public function store($test_id,Request $request)
     {
+
+        $validator = Validator::make($request->all(),[
+            'question_id'=>'required',
+        ]);
+
+        if($validator->fails()){
+            return response()->json($validator->errors());
+        }
+
         $testQuestion = new TestQuestion();
         $testQuestion->test_id = $test_id;
         $testQuestion->question_id = $request->question_id;
@@ -39,6 +49,14 @@ class TestQuestionController extends Controller
 
     public function update($test_id,$question_id,Request $request)
     {
+        $validator = Validator::make($request->all(),[
+            'question_id'=>'required',
+        ]);
+
+        if($validator->fails()){
+            return response()->json($validator->errors());
+        }
+
         $testQuestion = TestQuestion::where('test_id',$test_id)->where('question_id',$question_id)->get();
         if(is_null($testQuestion)){
             return response()->json("Not found",401);
@@ -52,6 +70,14 @@ class TestQuestionController extends Controller
 
     public function edit($test_id,$question_id,Request $request)
     {
+        $validator = Validator::make($request->all(),[
+            'question_id'=>'required',
+        ]);
+
+        if($validator->fails()){
+            return response()->json($validator->errors());
+        }
+        
         $testQuestion = TestQuestion::where('test_id',$test_id)->where('question_id',$question_id)->get();
         if(is_null($testQuestion)){
             return response()->json("Not found",401);

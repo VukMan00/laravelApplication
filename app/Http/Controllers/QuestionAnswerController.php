@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Resources\AnswerCollection;
 use Illuminate\Http\Request;
 use App\Models\Answer;
+use Illuminate\Support\Facades\Validator;
 
 class QuestionAnswerController extends Controller
 {
@@ -21,17 +22,44 @@ class QuestionAnswerController extends Controller
     }
     
     //kreiranje odgovora unutar datog pitanja
-    public function create($question_id)
+    public function store(Request $request,$question_id)
     {
-        $answer = new Answer();
-        $answer->question_id = $question_id;
-        $answer->save();
-        return response()->json($answer);
+        $validator = Validator::make($request->all(),[
+            'content'=>'required|string|max:255',
+            'answer'=>'required|boolean',
+            'question_id'=>'required'
+        ]);
+
+        if($validator->fails()){
+            return response()->json($validator->errors());
+        }
+
+        if($question_id == $request->question_id){
+            $answer = Answer::create([
+                'content'=>$request->content,
+                'answer'=>$request->answer,
+                'question_id'=>$request->question_id
+            ]);
+            return response()->json($answer);
+        }
+        else{
+            return response()->json('Not found',401);
+        }
     }
 
     //izmena odgovora unutar datog pitanja
     public function edit($question_id,$answer_id,Request $request)
     {
+        $validator = Validator::make($request->all(),[
+            'content'=>'required|string|max:255',
+            'answer'=>'required|boolean',
+            'question_id'=>'required'
+        ]);
+
+        if($validator->fails()){
+            return response()->json($validator->errors());
+        }
+
         $answer = Answer::find($answer_id);
         if($answer->question_id == $question_id){
             $answer->content = $request->content;
@@ -46,6 +74,16 @@ class QuestionAnswerController extends Controller
 
     public function update($question_id,$answer_id,Request $request)
     {
+        $validator = Validator::make($request->all(),[
+            'content'=>'required|string|max:255',
+            'answer'=>'required|boolean',
+            'question_id'=>'required'
+        ]);
+
+        if($validator->fails()){
+            return response()->json($validator->errors());
+        }
+
         $answer = Answer::find($answer_id);
         if($answer->question_id == $question_id){
             $answer->content = $request->content;

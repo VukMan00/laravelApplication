@@ -6,6 +6,7 @@ use App\Http\Resources\AnswerCollection;
 use App\Http\Resources\AnswerResource;
 use App\Models\Answer;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class AnswerController extends Controller
 {
@@ -27,8 +28,7 @@ class AnswerController extends Controller
      */
     public function create()
     {
-        $answer = Answer::create();
-        return response()->json($answer);
+        //
     }
 
     /**
@@ -39,7 +39,23 @@ class AnswerController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validator = Validator::make($request->all(),[
+            'content'=>'required|string|max:255',
+            'answer'=>'required|boolean',
+            'question_id'=>'required'
+        ]);
+
+        if($validator->fails()){
+            return response()->json($validator->errors());
+        }
+
+        $answer = Answer::create([
+            'content'=>$request->content,
+            'answer'=>$request->answer,
+            'question_id'=>$request->question_id
+        ]);
+
+        return response()->json($answer);
     }
 
     /**
@@ -62,6 +78,16 @@ class AnswerController extends Controller
      */
     public function edit(Request $request,$answer_id)
     {
+        $validator = Validator::make($request->all(),[
+            'content'=>'required|string|max:255',
+            'answer'=>'required|boolean',
+            'question_id'=>'required'
+        ]);
+
+        if($validator->fails()){
+            return response()->json($validator->errors());
+        }
+
         $answer = Answer::find($answer_id);
         if(is_null($answer)){
             return response()->json('Not found',401);
@@ -71,7 +97,10 @@ class AnswerController extends Controller
             $answer->answer = $request->answer;
             $answer->question_id = $request->question_id;
             $answer->update();
+            return response()->json("Successfull"); 
         }
+
+
     }
 
     /**
@@ -83,6 +112,16 @@ class AnswerController extends Controller
      */
     public function update(Request $request, $answer_id)
     {
+        $validator = Validator::make($request->all(),[
+            'content'=>'required|string|max:255',
+            'answer'=>'required|boolean',
+            'question_id'=>'required'
+        ]);
+
+        if($validator->fails()){
+            return response()->json($validator->errors());
+        }
+
         $answer = Answer::find($answer_id);
         if(is_null($answer)){
             return response()->json('Not found',401);

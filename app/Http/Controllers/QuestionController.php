@@ -6,6 +6,7 @@ use App\Http\Resources\QuestionCollection;
 use App\Http\Resources\QuestionResource;
 use App\Models\Question;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class QuestionController extends Controller
 {
@@ -27,8 +28,7 @@ class QuestionController extends Controller
      */
     public function create()
     {
-        $question = Question::create();
-        return response()->json($question);
+        
     }
 
     /**
@@ -39,7 +39,19 @@ class QuestionController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validator = Validator::make($request->all(),[
+            'content'=>'required|string|max:255'
+        ]);
+
+        if($validator->fails()){
+            return response()->json($validator->errors());
+        }
+
+        $question = Question::create([
+            'content'=>$request->content,
+        ]);
+
+        return response()->json($question);
     }
 
     /**
@@ -62,6 +74,14 @@ class QuestionController extends Controller
      */
     public function edit(Request $request,$question_id)
     {
+        $validator = Validator::make($request->all(),[
+            'content'=>'required|string|max:255'
+        ]);
+
+        if($validator->fails()){
+            return response()->json($validator->errors());
+        }
+
         $question = Question::find($question_id);
         if(is_null($question)){
             return response()->json('Not found',401);
@@ -82,6 +102,14 @@ class QuestionController extends Controller
      */
     public function update(Request $request, $question_id)
     {
+        $validator = Validator::make($request->all(),[
+            'content'=>'required|string|max:255'
+        ]);
+
+        if($validator->fails()){
+            return response()->json($validator->errors());
+        }
+
         $question = Question::find($question_id);
         if(is_null($question)){
             return response()->json('Not found',401);

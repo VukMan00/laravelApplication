@@ -6,6 +6,7 @@ use App\Http\Resources\TestCollection;
 use App\Http\Resources\TestResource;
 use App\Models\Test;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 use PHPUnit\TextUI\TestRunner;
 
 class TestController extends Controller
@@ -28,8 +29,7 @@ class TestController extends Controller
      */
     public function create()
     {
-        $test = Test::create();
-        return response()->json($test);
+        //
     }
 
     /**
@@ -40,7 +40,23 @@ class TestController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validator = Validator::make($request->all(),[
+            'name'=>'required|string|max:255',
+            'points'=>'required|integer|min:0|',
+            'author'=>'required|string|max:255'
+        ]);
+
+        if($validator->fails()){
+            return response()->json($validator->errors());
+        }
+
+        $test = Test::create([
+            'name'=>$request->name,
+            'points'=>$request->points,
+            'author'=>$request->author
+        ]);
+
+        return response()->json($test);
     }
 
     /**
@@ -63,6 +79,16 @@ class TestController extends Controller
      */
     public function edit(Request $request,$test_id)
     {
+        $validator = Validator::make($request->all(),[
+            'name'=>'required|string|max:255',
+            'points'=>'required|integer|min:0|',
+            'author'=>'required|string|max:255'
+        ]);
+
+        if($validator->fails()){
+            return response()->json($validator->errors());
+        }
+
         $test = Test::find($test_id);
         if(is_null($test)){
             return response()->json('Not found',401);
@@ -85,6 +111,16 @@ class TestController extends Controller
      */
     public function update(Request $request,$test_id)
     {
+        $validator = Validator::make($request->all(),[
+            'name'=>'required|string|max:255',
+            'points'=>'required|integer|min:0|',
+            'author'=>'required|string|max:255'
+        ]);
+
+        if($validator->fails()){
+            return response()->json($validator->errors());
+        }
+        
         $test = Test::find($test_id);
         if(is_null($test)){
             return response()->json('Not found',401);

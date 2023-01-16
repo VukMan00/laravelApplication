@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Resources\UserCollection;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class UserTestController extends Controller
 {
@@ -20,17 +21,17 @@ class UserTestController extends Controller
         }
     }
 
-    //kreiraj jednog user-a koji ce da polaze dati test
-    public function create($test_id)
-    {
-        $user = new User();
-        $user->test_id = $test_id;
-        $user->save();
-        return response()->json($user);
-    }
-
     public function update($test_id,$user_id,Request $request)
     {
+        $validator = Validator::make($request->all(),[
+            'username'=>'required|string|max:255|unique:users',
+            'email'=>'required|string|email|max:255|unique:users',
+        ]);
+
+        if($validator->fails()){
+            return response()->json($validator->errors());
+        }
+
         $user = User::find($user_id);
         if($user->test_id == $test_id){
             $user->username = $request->username;
@@ -47,6 +48,15 @@ class UserTestController extends Controller
     
     public function edit($test_id,$user_id,Request $request)
     {
+        $validator = Validator::make($request->all(),[
+            'username'=>'required|string|max:255|unique:users',
+            'email'=>'required|string|email|max:255|unique:users',
+        ]);
+
+        if($validator->fails()){
+            return response()->json($validator->errors());
+        }
+        
         $user = User::find($user_id);
         if($user->test_id == $test_id){
             $user->username = $request->username;

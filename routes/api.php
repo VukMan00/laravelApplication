@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AnswerController;
+use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\QuestionAnswerController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\QuestionController;
@@ -25,16 +26,42 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::resource('/users',UserController::class);
+Route::get('/users',[UserController::class,'index']);
+Route::get('/users/{id}',[UserController::class,'show']);
 
-Route::resource('/answers',AnswerController::class);
+Route::get('/answers',[AnswerController::class,'index']);
+Route::get('/answers/{id}',[AnswerController::class,'show']);
 
-Route::resource('/questions',QuestionController::class);
+Route::get('/questions',[QuestionController::class,'index']);
+Route::get('/questions/{id}',[QuestionController::class,'show']);
 
-Route::resource('/tests',TestController::class);
+Route::get('/tests',[TestController::class,'index']);
+Route::get('/tests/{id}',[TestController::class,'show']);
 
-//Ugnjezdeni resusri
-Route::resource('questions.answers',QuestionAnswerController::class)->only(['index','create','update','edit','destroy']);
-Route::resource('tests.questions',TestQuestionController::class)->only(['index','destroy','create','update','edit']);
-Route::resource('tests.users',UserTestController::class)->only(['index','destroy','create','update','edit']);
+Route::get('/questions/{id}/answers',[QuestionAnswerController::class,'index']);
+Route::get('/tests/{id}/questions',[TestQuestionController::class,'index']);
+Route::get('/tests/{id}/users',[UserTestController::class,'index']);
+
+
+//Registracija
+Route::post('/register',[AuthController::class,'register']);
+//Login
+Route::post('/login',[AuthController::class,'login']);
+
+//Potrebna autentifikacija!
+Route::group(['middleware'=>['auth:sanctum']],function(){
+    Route::get('/profile',function(Request $request){
+        return auth()->user();
+    });
+
+    Route::resource('users',UserController::class)->only(['update','edit','destroy']);
+    Route::resource('answers',AnswerController::class)->only(['update','edit','store','destroy']);
+    Route::resource('questions',QuestionController::class)->only(['update','edit','store','destroy']);
+    Route::resource('tests',TestController::class)->only(['update','edit','store','destroy']);
+
+    //Ugnjezdeni resusri
+    Route::resource('questions.answers',QuestionAnswerController::class)->only(['update','edit','store','destroy']);
+    Route::resource('tests.questions',TestQuestionController::class)->only(['store','destroy','update','edit']);
+    Route::resource('tests.users',UserTestController::class)->only(['destroy','update','edit']);
+});
 
