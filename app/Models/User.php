@@ -23,7 +23,8 @@ class User extends Authenticatable
         'username',
         'password',
         'email',
-        'test_id'
+        'firstname',
+        'lastname'
     ];
 
     /**
@@ -42,11 +43,10 @@ class User extends Authenticatable
      * @var array<string, string>
      */
     protected $casts = [
-        'email_verified_at' => 'datetime',
+        //'email_verified_at' => 'datetime',
     ];
 
-    public function tests()
-    {
-        return $this->belongsTo(Test::class,'test_id');
+    public function tests(){
+        return $this->belongsToMany(Test::class,'user_test','user_id','test_id');
     }
 }

@@ -19,12 +19,11 @@ class Test extends Model
 
     protected $guarded=[];
 
-    public function users()
-    {
-        return $this->hasMany(User::class);
-    }
-
     public function questions(){
         return $this->belongsToMany(Question::class,'test_question','test_id','question_id');
+    }
+
+    public function users(){
+        return $this->belongsToMany(User::class,'user_test','user_id','test_id');
     }
 }

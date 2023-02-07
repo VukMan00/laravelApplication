@@ -61,7 +61,7 @@ Route::group(['middleware'=>['auth:sanctum']],function(){
 
     //Ugnjezdeni resusri
     Route::resource('questions.answers',QuestionAnswerController::class)->only(['update','edit','store','destroy']);
-    Route::resource('tests.questions',TestQuestionController::class)->only(['store','destroy','update','edit']);
-    Route::resource('tests.users',UserTestController::class)->only(['destroy','update','edit']);
+    Route::resource('tests.questions',TestQuestionController::class)->only(['store','destroy']);
+    Route::resource('tests.users',UserTestController::class)->only(['destroy','store']);
 });
 

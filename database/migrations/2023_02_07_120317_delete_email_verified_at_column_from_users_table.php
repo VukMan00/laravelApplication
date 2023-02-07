@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateAnswers extends Migration
+class DeleteEmailVerifiedAtColumnFromUsersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,8 @@ class CreateAnswers extends Migration
      */
     public function up()
     {
-        Schema::create('answers', function (Blueprint $table) {
-            $table->id();
-            $table->string('content');
-            $table->boolean('answer');
-            $table->foreignId('question_id');
-            $table->timestamps();
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropColumn('email_verified_at');
         });
     }
 
@@ -29,6 +25,8 @@ class CreateAnswers extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('answers');
+        Schema::table('users', function (Blueprint $table) {
+            //
+        });
     }
 }

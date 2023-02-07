@@ -47,7 +47,7 @@ class TestQuestionController extends Controller
         return response()->json($testQuestion);
     }
 
-    public function update($test_id,$question_id,Request $request)
+    /*public function update($test_id,$question_id,Request $request)
     {
         $validator = Validator::make($request->all(),[
             'question_id'=>'required',
@@ -66,9 +66,9 @@ class TestQuestionController extends Controller
             $testQuestion->update();
             return response()->json("Successfull");
         }
-    }
+    }*/
 
-    public function edit($test_id,$question_id,Request $request)
+    /*public function edit($test_id,$question_id,Request $request)
     {
         $validator = Validator::make($request->all(),[
             'question_id'=>'required',
@@ -87,7 +87,7 @@ class TestQuestionController extends Controller
             $testQuestion->update();
             return response()->json("Successfull");
         }
-    }
+    }*/
 
     //brisanje pitanja sa testa
     public function destroy($test_id,$question_id)
