@@ -18,7 +18,7 @@ class QuestionController extends Controller
     public function index()
     {
         $questions = Question::all();
-        return new QuestionCollection($questions);
+        return new QuestionCollection(new QuestionResource($questions));
     }
 
     /**
@@ -51,7 +51,7 @@ class QuestionController extends Controller
             'content'=>$request->content,
         ]);
 
-        return response()->json($question);
+        return response()->json(new QuestionResource($question));
     }
 
     /**
@@ -131,8 +131,13 @@ class QuestionController extends Controller
     {
         try{
             $question = Question::find($question_id);
-            $question->delete();
-            return response()->json("Successfull");
+            if(is_null($question)){
+                return response()->json('Not found',401);
+            }
+            else{
+                $question->delete();
+                return response()->json("Successfull");
+            }
         }
         catch(\Illuminate\Database\QueryException $e){
             return response()->json($e);

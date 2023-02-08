@@ -18,7 +18,7 @@ class UserController extends Controller
     public function index()
     {
         $users = User::all();
-        return new UserCollection($users);
+        return new UserCollection(new UserResource($users));
     }
 
     /**
@@ -64,6 +64,8 @@ class UserController extends Controller
         $validator = Validator::make($request->all(),[
             'username'=>'required|string|max:255|unique:users',
             'email'=>'required|string|email|max:255|unique:users',
+            'firstname'=>'required|string|min:2',
+            'lastname'=>'reguired|string|min:2'
         ]);
 
         if($validator->fails()){
@@ -79,7 +81,7 @@ class UserController extends Controller
             $user->email = $request->email;
             $user->update();
 
-            return response()->json($user);
+            return response()->json(new UserResource($user));
         }
     }
 
@@ -95,7 +97,10 @@ class UserController extends Controller
         $validator = Validator::make($request->all(),[
             'username'=>'required|string|max:255|unique:users',
             'email'=>'required|string|email|max:255|unique:users',
+            'firstname'=>'required|string|min:2',
+            'lastname'=>'reguired|string|min:2'
         ]);
+        
 
         if($validator->fails()){
             return response()->json($validator->errors());
@@ -110,7 +115,7 @@ class UserController extends Controller
             $user->email = $request->email;
             $user->update();
 
-            return response()->json($user);
+            return response()->json(new UserResource($user));
         }
     }
 
@@ -124,8 +129,13 @@ class UserController extends Controller
     {
         try{
             $user = User::find($user_id);
-            $user->delete();
-            return response()->json("Successfull");
+            if(is_null($user)){
+                return response()->json('Not found',401);
+            }
+            else{
+                $user->delete();
+                return response()->json("Successfull");
+            }
         }
         catch(\Illuminate\Database\QueryException $e){
             return response()->json($e);

@@ -19,7 +19,7 @@ class TestController extends Controller
     public function index()
     {
         $tests = Test::all();
-        return new TestCollection($tests);
+        return new TestCollection(new TestResource($tests));
     }
 
     /**
@@ -56,7 +56,7 @@ class TestController extends Controller
             'author'=>$request->author
         ]);
 
-        return response()->json($test);
+        return response()->json(new TestResource($test));
     }
 
     /**
@@ -144,8 +144,13 @@ class TestController extends Controller
     {
         try{
             $test = Test::find($test_id);
-            $test->delete();
-            return response()->json("Successfull");
+            if(is_null($test)){
+                return response()->json('Not found',401);
+            }
+            else{
+                $test->delete();
+                return response()->json("Successfull");
+            }
         }
         catch(\Illuminate\Database\QueryException $e){
             return response()->json($e);

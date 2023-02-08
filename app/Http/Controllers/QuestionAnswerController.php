@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\AnswerCollection;
+use App\Http\Resources\AnswerResource;
 use Illuminate\Http\Request;
 use App\Models\Answer;
 use Illuminate\Support\Facades\Validator;
@@ -17,7 +18,7 @@ class QuestionAnswerController extends Controller
             return response()->json('Not found',401);
         }
         else{
-            return response()->json($answers);
+            return new AnswerCollection(new AnswerResource($answers));
         }
     }
     
@@ -40,7 +41,7 @@ class QuestionAnswerController extends Controller
                 'answer'=>$request->answer,
                 'question_id'=>$request->question_id
             ]);
-            return response()->json($answer);
+            return response()->json(new AnswerResource($answer));
         }
         else{
             return response()->json('Not found',401);
@@ -65,7 +66,7 @@ class QuestionAnswerController extends Controller
             $answer->content = $request->content;
             $answer->answer = $request->answer;
             $answer->update();
-            return response()->json($answer);
+            return response()->json(new AnswerResource($answer));
         }
         else{
             return response()->json('Not found',401);
@@ -89,7 +90,7 @@ class QuestionAnswerController extends Controller
             $answer->content = $request->content;
             $answer->answer = $request->answer;
             $answer->update();
-            return response()->json($answer);
+            return response()->json(new AnswerResource($answer));
         }
         else{
             return response()->json('Not found',401);

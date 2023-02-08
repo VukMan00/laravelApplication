@@ -40,7 +40,7 @@ Route::get('/tests/{id}',[TestController::class,'show']);
 
 Route::get('/questions/{id}/answers',[QuestionAnswerController::class,'index']);
 Route::get('/tests/{id}/questions',[TestQuestionController::class,'index']);
-Route::get('/tests/{id}/users',[UserTestController::class,'index']);
+Route::get('/questions/{id}/tests',[TestQuestionController::class,'getTests']);
 
 
 //Registracija
@@ -61,7 +61,6 @@ Route::group(['middleware'=>['auth:sanctum']],function(){
 
     //Ugnjezdeni resusri
     Route::resource('questions.answers',QuestionAnswerController::class)->only(['update','edit','store','destroy']);
-    Route::resource('tests.questions',TestQuestionController::class)->only(['store','destroy','update','edit']);
-    Route::resource('tests.users',UserTestController::class)->only(['destroy','update','edit']);
+    Route::resource('tests.questions',TestQuestionController::class)->only(['store','edit']);
 });
 

@@ -19,63 +19,91 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
 
-        // \App\Models\User::factory(10)->create();
-        Question::create([
+        $q1 = Question::create([
             'content'=>'Da li je php objektno orijentisan jezik'
         ]);
 
-        Question::create([
+        $q2 = Question::create([
             'content'=>'Koji je glavni grad Srbije'
+        ]);
+
+        $q3 = Question::create([
+            'content'=>'Koji od ponudjenih jezika spada u objektno orijentisane jezike'
         ]);
 
         Answer::create([
             'content'=>'Da',
             'answer'=>true,
-            'question_id'=>1
+            'question_id'=>$q1->id
         ]);
 
         Answer::create([
             'content'=>'Ne',
             'answer'=>false,
-            'question_id'=>1
+            'question_id'=>$q1->id
         ]);
 
         Answer::create([
             'content'=>'Beograd',
             'answer'=>true,
-            'question_id'=>2
+            'question_id'=>$q2->id
         ]);
 
         Answer::create([
             'content'=>'Jagodina',
             'answer'=>false,
-            'question_id'=>2
+            'question_id'=>$q2->id
         ]);
 
-        Test::create([
+        Answer::create([
+            'content'=>'Java',
+            'answer'=>true,
+            'question_id'=>$q3->id
+        ]);
+
+        Answer::create([
+            'content'=>'C#',
+            'answer'=>true,
+            'question_id'=>$q3->id
+        ]);
+
+        Answer::create([
+            'content'=>'Matlab',
+            'answer'=>false,
+            'question_id'=>$q3->id
+        ]);
+
+        $t1 = Test::create([
             'name'=>'Internet tehnologije',
             'points'=>30,
             'author'=>'Aleksa Miletic'
         ]);
 
-       TestQuestion::create([
-        'test_id' => 1,
-        'question_id'=>1
-       ]);
+        $t2 = Test::create([
+            'name'=>'Test iz geografije',
+            'points'=>40,
+            'author'=>'Jasna'
+        ]);
 
        TestQuestion::create([
-        'test_id'=>1,
-        'question_id'=>2
+            'test_id' => $t1->id,
+            'question_id'=>$q1->id
        ]);
 
-
-       User::create([
-        'username'=>'vukman',
-        'email'=>'vukman619@gmail.com',
-        'password'=>'vukman00',
-        'test_id'=>1
+       TestQuestion::create([
+            'test_id'=>$t1->id,
+            'question_id'=>$q2->id
        ]);
 
+       TestQuestion::create([
+            'test_id'=>$t2->id,
+            'question_id'=>$q1->id
+        ]);
+
+        TestQuestion::create([
+            'test_id'=>$t2->id,
+            'question_id'=>$q2->id
+        ]);
 
 
     }

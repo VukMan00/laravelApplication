@@ -20,8 +20,6 @@ class TestResource extends JsonResource
             'name'=>$this->resource->name,
             'points'=>$this->resource->points,
             'author'=>$this->resource->author,
-            'question'=>$this->resource->questions,
-            'user'=>UserResource::collection($this->resource->users)
         ];
     }
 }

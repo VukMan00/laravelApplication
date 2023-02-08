@@ -19,6 +19,8 @@ class CreateTestQuestion extends Migration
             $table->foreignId('test_id');
             $table->foreignId('question_id');
             $table->timestamps();
+            $table->foreign('test_id')->references('id')->on('tests');
+            $table->foreign('question_id')->references('id')->on('questions');
         });
     }
 

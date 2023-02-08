@@ -19,6 +19,7 @@ class CreateAnswers extends Migration
             $table->boolean('answer');
             $table->foreignId('question_id');
             $table->timestamps();
+            $table->foreign('question_id')->references('id')->on('questions');
         });
     }
 

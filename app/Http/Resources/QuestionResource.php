@@ -20,7 +20,6 @@ class QuestionResource extends JsonResource
             'id'=>$this->resource->id,
             'content'=>$this->resource->content,
             'answer'=>AnswerResource::collection($this->resource->answers),
-            'test'=>$this->resource->tests
         ];
     }
 }

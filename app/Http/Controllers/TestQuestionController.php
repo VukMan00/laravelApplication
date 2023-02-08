@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\QuestionCollection;
+use App\Http\Resources\QuestionResource;
+use App\Http\Resources\TestResource;
 use App\Models\Question;
 use App\Models\Test;
 use App\Models\TestQuestion;
@@ -18,13 +20,29 @@ class TestQuestionController extends Controller
         $testQuestions = TestQuestion::get()->where('test_id',$test_id);
         $questions = array();
         foreach($testQuestions as $testQuestion){
-            $questions[] = Question::get()->where('id',$testQuestion->question_id);
+            $question = QuestionResource::collection(new QuestionResource(Question::get()->where('id',$testQuestion->question_id)));
+            $questions[] = $question;
         }
         if(is_null($questions)){
             return response()->json('Not found',401);
         }
         else{
             return response()->json($questions);
+        }
+    }
+
+    public function getTests($question_id){
+        $testQuestions = TestQuestion::get()->where('question_id',$question_id);
+        $tests = array();
+        foreach($testQuestions as $testQuestion){
+            $test = TestResource::collection(new TestResource(Test::get()->where('id',$testQuestion->test_id)));
+            $tests[] = $test;
+        }
+        if(is_null($tests)){
+            return response()->json('Not found',401);
+        }
+        else{
+            return response()->json($tests);
         }
     }
 

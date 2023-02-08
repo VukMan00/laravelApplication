@@ -18,7 +18,7 @@ class AnswerController extends Controller
     public function index()
     {
         $answers = Answer::all();
-        return new AnswerCollection($answers);
+        return new AnswerCollection(new AnswerResource($answers));
     }
 
     /**
@@ -55,7 +55,7 @@ class AnswerController extends Controller
             'question_id'=>$request->question_id
         ]);
 
-        return response()->json($answer);
+        return response()->json(new AnswerResource($answer));
     }
 
     /**
@@ -65,9 +65,15 @@ class AnswerController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public function show(Answer $answer)
+    public function show($answer_id)
     {
-      return new AnswerResource($answer);
+        $answer = Answer::find($answer_id);
+        if(is_null($answer)){
+            return response()->json('Not found',401);
+        }
+        else{
+            return new AnswerResource($answer);
+        }
     }
 
     /**
@@ -145,8 +151,13 @@ class AnswerController extends Controller
     {
         try{
             $answer = Answer::find($answer_id);
-            $answer->delete();
-            return response()->json("Successfull");
+            if(is_null($answer)){
+                return response()->json('Not found',401);
+            }
+            else{
+                $answer->delete();
+                return response()->json("Successfull");
+            }
         }
         catch(\Illuminate\Database\QueryException $e){
             return response()->json($e);
