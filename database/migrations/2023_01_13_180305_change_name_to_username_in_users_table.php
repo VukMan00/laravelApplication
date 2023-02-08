@@ -26,7 +26,7 @@ class ChangeNameToUsernameInUsersTable extends Migration
     public function down()
     {
         Schema::table('users', function (Blueprint $table) {
-            //
+            $table->renameColumn('name','username');
         });
     }
 }

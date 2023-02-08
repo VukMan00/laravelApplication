@@ -67,15 +67,9 @@ class AnswerController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-<<<<<<< HEAD
     public function show($answer_id)
     {
         $answer = Answer::find($answer_id);
-=======
-    public function show($answerId)
-    {
-        $answer = Answer::find($answerId);
->>>>>>> 859a9ac94ea663dfdb63226d7fae7f941274c648
         if(is_null($answer)){
             return response()->json('Not found',401);
         }
