@@ -8,6 +8,8 @@ use App\Models\Answer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
+use function PHPUnit\Framework\isNull;
+
 class AnswerController extends Controller
 {
     /**
@@ -65,9 +67,15 @@ class AnswerController extends Controller
      * @return \Illuminate\Http\Response
      */
 
+<<<<<<< HEAD
     public function show($answer_id)
     {
         $answer = Answer::find($answer_id);
+=======
+    public function show($answerId)
+    {
+        $answer = Answer::find($answerId);
+>>>>>>> 859a9ac94ea663dfdb63226d7fae7f941274c648
         if(is_null($answer)){
             return response()->json('Not found',401);
         }

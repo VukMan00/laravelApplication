@@ -48,9 +48,15 @@ class UserController extends Controller
      * @param  \App\Models\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function show(User $user)
+    public function show($userId)
     {
-        return new UserResource($user);
+        $user = User::find($userId);
+        if(is_null($user)){
+            return response()->json('Not found',401);
+        }
+        else{
+            return new UserResource($user);
+        }
     }
 
     /**
@@ -79,6 +85,8 @@ class UserController extends Controller
         else{
             $user->username = $request->username;
             $user->email = $request->email;
+            $user->firstname = $request->firstname;
+            $user->lastname = $request->lastname;
             $user->update();
 
             return response()->json(new UserResource($user));
@@ -98,7 +106,11 @@ class UserController extends Controller
             'username'=>'required|string|max:255|unique:users',
             'email'=>'required|string|email|max:255|unique:users',
             'firstname'=>'required|string|min:2',
+<<<<<<< HEAD
             'lastname'=>'reguired|string|min:2'
+=======
+            'lastname'=>'required|string|min:2'
+>>>>>>> 859a9ac94ea663dfdb63226d7fae7f941274c648
         ]);
         
 
@@ -113,6 +125,8 @@ class UserController extends Controller
         else{
             $user->username = $request->username;
             $user->email = $request->email;
+            $user->firstname = $request->firstname;
+            $user->lastname = $request->lastname;
             $user->update();
 
             return response()->json(new UserResource($user));

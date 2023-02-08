@@ -66,9 +66,15 @@ class TestController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public function show(Test $test)
+    public function show($testId)
     {
-        return new TestResource($test);
+        $test = Test::find($testId);
+        if(is_null($test)){
+            return response()->json('Not found',401);
+        }
+        else{
+            return new TestResource($test);
+        }
     }
 
     /**

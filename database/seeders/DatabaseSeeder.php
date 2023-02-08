@@ -18,6 +18,9 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
+        $q1 = Question::create([
+            'content'=>'Da li je php objektno orijentisan jezik?'
+        ]);
 
         $q1 = Question::create([
             'content'=>'Da li je php objektno orijentisan jezik'

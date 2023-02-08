@@ -18,7 +18,7 @@ class UserFactory extends Factory
         return [
             'username' => $this->faker->name(),
             'email' => $this->faker->unique()->safeEmail(),
-            'email_verified_at' => now(),
+            //'email_verified_at' => now(),
             'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
             'remember_token' => Str::random(10),
             'firstname'=>$this->faker->name(),
@@ -31,4 +31,15 @@ class UserFactory extends Factory
      *
      * @return \Illuminate\Database\Eloquent\Factories\Factory
      */
+<<<<<<< HEAD
+=======
+    /*public function unverified()
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'email_verified_at' => null,
+            ];
+        });
+    }*/
+>>>>>>> 859a9ac94ea663dfdb63226d7fae7f941274c648
 }

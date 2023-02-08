@@ -61,9 +61,15 @@ class QuestionController extends Controller
      * @return \Illuminate\Http\Response
      */
   
-    public function show(Question $question)
+    public function show($questionId)
     {
-        return new QuestionResource($question);
+        $question = Question::find($questionId);
+        if(is_null($question)){
+            return response()->json('Not found',401);
+        }
+        else{
+            return new QuestionResource($question);
+        }
     }
 
     /**

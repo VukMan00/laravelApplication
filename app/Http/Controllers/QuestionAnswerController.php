@@ -6,6 +6,7 @@ use App\Http\Resources\AnswerCollection;
 use App\Http\Resources\AnswerResource;
 use Illuminate\Http\Request;
 use App\Models\Answer;
+use App\Models\Question;
 use Illuminate\Support\Facades\Validator;
 
 class QuestionAnswerController extends Controller
@@ -28,18 +29,18 @@ class QuestionAnswerController extends Controller
         $validator = Validator::make($request->all(),[
             'content'=>'required|string|max:255',
             'answer'=>'required|boolean',
-            'question_id'=>'required'
         ]);
 
         if($validator->fails()){
             return response()->json($validator->errors());
         }
 
-        if($question_id == $request->question_id){
+        $question = Question::find($question_id);
+        if(!(is_null($question))){
             $answer = Answer::create([
                 'content'=>$request->content,
                 'answer'=>$request->answer,
-                'question_id'=>$request->question_id
+                'question_id'=>$question_id
             ]);
             return response()->json(new AnswerResource($answer));
         }
@@ -54,7 +55,6 @@ class QuestionAnswerController extends Controller
         $validator = Validator::make($request->all(),[
             'content'=>'required|string|max:255',
             'answer'=>'required|boolean',
-            'question_id'=>'required'
         ]);
 
         if($validator->fails()){
@@ -78,7 +78,6 @@ class QuestionAnswerController extends Controller
         $validator = Validator::make($request->all(),[
             'content'=>'required|string|max:255',
             'answer'=>'required|boolean',
-            'question_id'=>'required'
         ]);
 
         if($validator->fails()){
