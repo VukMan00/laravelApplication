@@ -106,11 +106,7 @@ class UserController extends Controller
             'username'=>'required|string|max:255|unique:users',
             'email'=>'required|string|email|max:255|unique:users',
             'firstname'=>'required|string|min:2',
-<<<<<<< HEAD
             'lastname'=>'reguired|string|min:2'
-=======
-            'lastname'=>'required|string|min:2'
->>>>>>> 859a9ac94ea663dfdb63226d7fae7f941274c648
         ]);
         
 
