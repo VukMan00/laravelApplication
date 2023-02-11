@@ -14,7 +14,7 @@ class DeleteEmailVerifiedAtColumnFromUsersTable extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('email_verified');
+            $table->dropColumn('email_verified_at');
         });
     }
 

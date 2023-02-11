@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Resources\AnswerCollection;
 use App\Http\Resources\AnswerResource;
 use App\Models\Answer;
+use App\Models\Question;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -51,13 +52,18 @@ class AnswerController extends Controller
             return response()->json($validator->errors());
         }
 
-        $answer = Answer::create([
-            'content'=>$request->content,
-            'answer'=>$request->answer,
-            'question_id'=>$request->question_id
-        ]);
-
-        return response()->json(new AnswerResource($answer));
+        $question = Question::find($request->question_id);
+        if(is_null($question)){
+            return response()->json('Question not found',404);
+        }
+        else{
+            $answer = Answer::create([
+                'content'=>$request->content,
+                'answer'=>$request->answer,
+                'question_id'=>$request->question_id
+            ]);
+            return response()->json(new AnswerResource($answer));
+        }
     }
 
     /**
@@ -71,7 +77,7 @@ class AnswerController extends Controller
     {
         $answer = Answer::find($answer_id);
         if(is_null($answer)){
-            return response()->json('Not found',401);
+            return response()->json('Not found',404);
         }
         else{
             return new AnswerResource($answer);
@@ -96,9 +102,14 @@ class AnswerController extends Controller
             return response()->json($validator->errors());
         }
 
+        $question = Question::find($request->question_id);
+        if(is_null($question)){
+            return response()->json('Question not found',404);
+        }
+
         $answer = Answer::find($answer_id);
         if(is_null($answer)){
-            return response()->json('Not found',401);
+            return response()->json('Not found',404);
         }
         else{
             $answer->content = $request->content;
@@ -130,9 +141,14 @@ class AnswerController extends Controller
             return response()->json($validator->errors());
         }
 
+        $question = Question::find($request->question_id);
+        if(is_null($question)){
+            return response()->json('Question not found',404);
+        }
+
         $answer = Answer::find($answer_id);
         if(is_null($answer)){
-            return response()->json('Not found',401);
+            return response()->json('Not found',404);
         }
         else{
             $answer->content = $request->content;
@@ -154,7 +170,7 @@ class AnswerController extends Controller
         try{
             $answer = Answer::find($answer_id);
             if(is_null($answer)){
-                return response()->json('Not found',401);
+                return response()->json('Not found',404);
             }
             else{
                 $answer->delete();

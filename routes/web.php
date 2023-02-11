@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
+/*Route::get('/', function () {
     return view('welcome');
 });
 
@@ -31,4 +31,4 @@ Route::get('/questions',[QuestionController::class,'index']);
 Route::get('/questions/{id}',[QuestionController::class,'show']);
 
 Route::get('/tests',[TestController::class,'index']);
-Route::get('/tests/{id}',[TestController::class,'show']);
+Route::get('/tests/{id}',[TestController::class,'show']);*/

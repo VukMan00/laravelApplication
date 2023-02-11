@@ -18,13 +18,17 @@ class TestQuestionController extends Controller
     public function index($test_id)
     {
         $testQuestions = TestQuestion::get()->where('test_id',$test_id);
+        if(is_null($testQuestions)){
+            return response()->json('Not found',404);
+        }
+        
         $questions = array();
         foreach($testQuestions as $testQuestion){
             $question = QuestionResource::collection(new QuestionResource(Question::get()->where('id',$testQuestion->question_id)));
             $questions[] = $question;
         }
         if(is_null($questions)){
-            return response()->json('Not found',401);
+            return response()->json('Not found',404);
         }
         else{
             return response()->json($questions);
@@ -33,13 +37,16 @@ class TestQuestionController extends Controller
 
     public function getTests($question_id){
         $testQuestions = TestQuestion::get()->where('question_id',$question_id);
+        if(sizeof($testQuestions)===0){
+            return response()->json('Not found',404);
+        }
         $tests = array();
         foreach($testQuestions as $testQuestion){
             $test = TestResource::collection(new TestResource(Test::get()->where('id',$testQuestion->test_id)));
             $tests[] = $test;
         }
         if(is_null($tests)){
-            return response()->json('Not found',401);
+            return response()->json('Not found',404);
         }
         else{
             return response()->json($tests);
@@ -49,7 +56,6 @@ class TestQuestionController extends Controller
     //dodavanje pitanja testu
     public function store($test_id,Request $request)
     {
-
         $validator = Validator::make($request->all(),[
             'question_id'=>'required',
         ]);
@@ -58,11 +64,17 @@ class TestQuestionController extends Controller
             return response()->json($validator->errors());
         }
 
-        $testQuestion = new TestQuestion();
-        $testQuestion->test_id = $test_id;
-        $testQuestion->question_id = $request->question_id;
-        $testQuestion->save();
-        return response()->json($testQuestion);
+        $question = Question::find($request->question_id);
+        if(is_null($question)){
+            return response()->json('Not found',404);
+        }
+        else{
+            $testQuestion = new TestQuestion();
+            $testQuestion->test_id = $test_id;
+            $testQuestion->question_id = $request->question_id;
+            $testQuestion->save();
+            return response()->json($testQuestion);
+        }
     }
 
     public function update($test_id,$question_id,Request $request)
@@ -76,8 +88,8 @@ class TestQuestionController extends Controller
         }
 
         $testQuestion = TestQuestion::where('test_id',$test_id)->where('question_id',$question_id)->get();
-        if(is_null($testQuestion)){
-            return response()->json("Not found",401);
+        if(sizeof($testQuestion)===0){
+            return response()->json("Not found",404);
         }
         else{
             $testQuestion->question_id = $request->question_id;
@@ -97,8 +109,8 @@ class TestQuestionController extends Controller
         }
         
         $testQuestion = TestQuestion::where('test_id',$test_id)->where('question_id',$question_id)->get();
-        if(is_null($testQuestion)){
-            return response()->json("Not found",401);
+        if(sizeof($testQuestion)===0){
+            return response()->json("Not found",404);
         }
         else{
             $testQuestion->question_id = $request->question_id;
@@ -112,12 +124,12 @@ class TestQuestionController extends Controller
     {
         try{
             $testQuestion = TestQuestion::where('test_id',$test_id)->where('question_id',$question_id)->get();
-            if(is_null($testQuestion)){
-                return response()->json("Not found",401);
+            if(sizeof($testQuestion) === 0){
+                return response()->json("Not found",404);
             }
             else{
                 $testQuestion->each->delete();
-                return response()->json("Successfull");
+                return response()->json('Successfull');
             }
         }
         catch(\Illuminate\Database\QueryException $e){

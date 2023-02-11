@@ -14,9 +14,13 @@ class QuestionAnswerController extends Controller
     //vraca sve odgovore jednog pitanja
     public function index($question_id)
     {
+        $question = Question::find($question_id);
+        if(is_null($question)){
+            return response()->json('Question not found',404);
+        }
         $answers = Answer::get()->where('question_id',$question_id);
         if(is_null($answers)){
-            return response()->json('Not found',401);
+            return response()->json('Not found',404);
         }
         else{
             return new AnswerCollection(new AnswerResource($answers));
@@ -45,7 +49,7 @@ class QuestionAnswerController extends Controller
             return response()->json(new AnswerResource($answer));
         }
         else{
-            return response()->json('Not found',401);
+            return response()->json('Question not found',404);
         }
     }
 
@@ -61,15 +65,23 @@ class QuestionAnswerController extends Controller
             return response()->json($validator->errors());
         }
 
+        $question = Question::find($question_id);
+        if(is_null($question)){
+            return response()->json('Question not found',404);
+        }
+
         $answer = Answer::find($answer_id);
-        if($answer->question_id == $question_id){
+        if(is_null($answer)){
+            return response()->json('Not found',404);
+        }
+        else if($answer->question_id == $question_id){
             $answer->content = $request->content;
             $answer->answer = $request->answer;
             $answer->update();
             return response()->json(new AnswerResource($answer));
         }
         else{
-            return response()->json('Not found',401);
+            return response()->json('Not found',404);
         }
     }
 
@@ -84,28 +96,43 @@ class QuestionAnswerController extends Controller
             return response()->json($validator->errors());
         }
 
+        $question = Question::find($question_id);
+        if(is_null($question)){
+            return response()->json('Question not found',404);
+        }
+
         $answer = Answer::find($answer_id);
-        if($answer->question_id == $question_id){
+        if(is_null($answer)){
+            return response()->json('Not found',404);
+        }
+        else if($answer->question_id == $question_id){
             $answer->content = $request->content;
             $answer->answer = $request->answer;
             $answer->update();
             return response()->json(new AnswerResource($answer));
         }
         else{
-            return response()->json('Not found',401);
+            return response()->json('Not found',404);
         }
     }
 
     public function destroy($question_id,$answer_id)
     {
         try{
+            $question = Question::find($question_id);
+            if(is_null($question)){
+                return response()->json('Question not found',404);
+            }
             $answer = Answer::find($answer_id);
-            if($answer->question_id==$question_id && !is_null($answer)){
+            if(is_null($answer)){
+                return response()->json('Not found',404);
+            }
+            else if($answer->question_id==$question_id){
                 $answer->delete();
                 return response()->json("Successfull");
             }
             else{
-                return response()->json('Not found',401);
+                return response()->json('Not found',404);
             }
         }
         catch(\Illuminate\Database\QueryException $e){

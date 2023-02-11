@@ -7,7 +7,6 @@ use App\Http\Resources\TestResource;
 use App\Models\Test;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-use PHPUnit\TextUI\TestRunner;
 
 class TestController extends Controller
 {
@@ -42,7 +41,7 @@ class TestController extends Controller
     {
         $validator = Validator::make($request->all(),[
             'name'=>'required|string|max:255',
-            'points'=>'required|integer|min:0|',
+            'points'=>'required|integer|min:0',
             'author'=>'required|string|max:255'
         ]);
 
@@ -70,7 +69,7 @@ class TestController extends Controller
     {
         $test = Test::find($testId);
         if(is_null($test)){
-            return response()->json('Not found',401);
+            return response()->json('Not found',404);
         }
         else{
             return new TestResource($test);
@@ -87,7 +86,7 @@ class TestController extends Controller
     {
         $validator = Validator::make($request->all(),[
             'name'=>'required|string|max:255',
-            'points'=>'required|integer|min:0|',
+            'points'=>'required|integer|min:0',
             'author'=>'required|string|max:255'
         ]);
 
@@ -97,7 +96,7 @@ class TestController extends Controller
 
         $test = Test::find($test_id);
         if(is_null($test)){
-            return response()->json('Not found',401);
+            return response()->json('Not found',404);
         }
         else{
             $test->name = $request->name;
@@ -119,7 +118,7 @@ class TestController extends Controller
     {
         $validator = Validator::make($request->all(),[
             'name'=>'required|string|max:255',
-            'points'=>'required|integer|min:0|',
+            'points'=>'required|integer|min:0',
             'author'=>'required|string|max:255'
         ]);
 
@@ -129,7 +128,7 @@ class TestController extends Controller
         
         $test = Test::find($test_id);
         if(is_null($test)){
-            return response()->json('Not found',401);
+            return response()->json('Not found',404);
         }
         else{
             $test->name = $request->name;
@@ -151,7 +150,7 @@ class TestController extends Controller
         try{
             $test = Test::find($test_id);
             if(is_null($test)){
-                return response()->json('Not found',401);
+                return response()->json('Not found',404);
             }
             else{
                 $test->delete();

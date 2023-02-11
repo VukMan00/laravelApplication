@@ -52,7 +52,7 @@ class UserController extends Controller
     {
         $user = User::find($userId);
         if(is_null($user)){
-            return response()->json('Not found',401);
+            return response()->json('Not found',404);
         }
         else{
             return new UserResource($user);
@@ -71,7 +71,7 @@ class UserController extends Controller
             'username'=>'required|string|max:255|unique:users',
             'email'=>'required|string|email|max:255|unique:users',
             'firstname'=>'required|string|min:2',
-            'lastname'=>'reguired|string|min:2'
+            'lastname'=>'required|string|min:2'
         ]);
 
         if($validator->fails()){
@@ -80,7 +80,7 @@ class UserController extends Controller
 
         $user = User::find($user_id);
         if(is_null($user)){
-            return response()->json('Not found',401);
+            return response()->json('Not found',404);
         }
         else{
             $user->username = $request->username;
@@ -89,7 +89,7 @@ class UserController extends Controller
             $user->lastname = $request->lastname;
             $user->update();
 
-            return response()->json(new UserResource($user));
+            return response()->json("Successfull");
         }
     }
 
@@ -106,17 +106,16 @@ class UserController extends Controller
             'username'=>'required|string|max:255|unique:users',
             'email'=>'required|string|email|max:255|unique:users',
             'firstname'=>'required|string|min:2',
-            'lastname'=>'reguired|string|min:2'
+            'lastname'=>'required|string|min:2'
         ]);
         
-
         if($validator->fails()){
             return response()->json($validator->errors());
         }
 
         $user = User::find($user_id);
         if(is_null($user)){
-            return response()->json('Not found',401);
+            return response()->json('Not found',404);
         }
         else{
             $user->username = $request->username;
@@ -125,7 +124,7 @@ class UserController extends Controller
             $user->lastname = $request->lastname;
             $user->update();
 
-            return response()->json(new UserResource($user));
+            return response()->json("Successfull");
         }
     }
 
@@ -140,7 +139,7 @@ class UserController extends Controller
         try{
             $user = User::find($user_id);
             if(is_null($user)){
-                return response()->json('Not found',401);
+                return response()->json('Not found',404);
             }
             else{
                 $user->delete();

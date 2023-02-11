@@ -22,10 +22,6 @@ class DatabaseSeeder extends Seeder
             'content'=>'Da li je php objektno orijentisan jezik?'
         ]);
 
-        $q1 = Question::create([
-            'content'=>'Da li je php objektno orijentisan jezik'
-        ]);
-
         $q2 = Question::create([
             'content'=>'Koji je glavni grad Srbije'
         ]);

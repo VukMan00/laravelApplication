@@ -65,7 +65,7 @@ class QuestionController extends Controller
     {
         $question = Question::find($questionId);
         if(is_null($question)){
-            return response()->json('Not found',401);
+            return response()->json('Not found',404);
         }
         else{
             return new QuestionResource($question);
@@ -90,7 +90,7 @@ class QuestionController extends Controller
 
         $question = Question::find($question_id);
         if(is_null($question)){
-            return response()->json('Not found',401);
+            return response()->json('Not found',404);
         }
         else{
             $question->content = $request->content;
@@ -118,7 +118,7 @@ class QuestionController extends Controller
 
         $question = Question::find($question_id);
         if(is_null($question)){
-            return response()->json('Not found',401);
+            return response()->json('Not found',404);
         }
         else{
             $question->content = $request->content;
@@ -138,7 +138,7 @@ class QuestionController extends Controller
         try{
             $question = Question::find($question_id);
             if(is_null($question)){
-                return response()->json('Not found',401);
+                return response()->json('Not found',404);
             }
             else{
                 $question->delete();
