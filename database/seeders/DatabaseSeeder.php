@@ -91,7 +91,7 @@ class DatabaseSeeder extends Seeder
 
        TestQuestion::create([
             'test_id'=>$t1->id,
-            'question_id'=>$q2->id
+            'question_id'=>$q3->id
        ]);
 
        TestQuestion::create([

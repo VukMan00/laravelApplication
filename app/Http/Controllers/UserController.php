@@ -6,6 +6,7 @@ use App\Http\Resources\UserCollection;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
@@ -70,6 +71,7 @@ class UserController extends Controller
         $validator = Validator::make($request->all(),[
             'username'=>'required|string|max:255|unique:users',
             'email'=>'required|string|email|max:255|unique:users',
+            'password'=>'required|string|min:4',
             'firstname'=>'required|string|min:2',
             'lastname'=>'required|string|min:2'
         ]);
@@ -85,6 +87,7 @@ class UserController extends Controller
         else{
             $user->username = $request->username;
             $user->email = $request->email;
+            $user->password = Hash::make($request->password);
             $user->firstname = $request->firstname;
             $user->lastname = $request->lastname;
             $user->update();
@@ -105,6 +108,7 @@ class UserController extends Controller
         $validator = Validator::make($request->all(),[
             'username'=>'required|string|max:255|unique:users',
             'email'=>'required|string|email|max:255|unique:users',
+            'password'=>'required|string|min:4',
             'firstname'=>'required|string|min:2',
             'lastname'=>'required|string|min:2'
         ]);
@@ -120,6 +124,7 @@ class UserController extends Controller
         else{
             $user->username = $request->username;
             $user->email = $request->email;
+            $user->password = Hash::make($request->password);
             $user->firstname = $request->firstname;
             $user->lastname = $request->lastname;
             $user->update();
